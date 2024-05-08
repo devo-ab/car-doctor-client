@@ -2,12 +2,17 @@ import { FcGoogle } from "react-icons/fc";
 import { FaLinkedinIn } from "react-icons/fa";
 import { FaFacebookF } from "react-icons/fa";
 import login from "../../assets/images/login/login.svg";
-import { Link } from "react-router-dom";
-import { useContext } from "react";
-import { AuthContext } from "../../Providers/AuthProvider";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+// import { useContext } from "react";
+// import { AuthContext } from "../../Providers/AuthProvider";
+import axios from "axios";
+import useAuth from "../../Hooks/useAuth";
 
 const LogIn = () => {
-  const { signInWithEmailPass } = useContext(AuthContext);
+  // const { signInWithEmailPass } = useContext(AuthContext);
+  const { signInWithEmailPass } = useAuth();
+  const location = useLocation();
+  const navigate = useNavigate();
 
   const handleSignIn = (e) => {
     e.preventDefault();
@@ -17,12 +22,22 @@ const LogIn = () => {
     console.log(email, password);
 
     signInWithEmailPass(email, password)
-    .then(result => {
-      console.log(result.user);
-    })
-    .catch(error => {
-      console.log(error)
-    })
+      .then((result) => {
+        const loggedInUser = result.user;
+        console.log(loggedInUser);
+        const user = { email };
+
+        // get access token
+        axios.post("https://car-doctor-server-eight-sooty.vercel.app/jwt", user, { withCredentials: true }).then((res) => {
+          console.log(res.data);
+          if (res.data.success) {
+            navigate(location?.state ? location?.state : "/");
+          }
+        });
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
 
   return (

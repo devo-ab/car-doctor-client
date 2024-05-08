@@ -3,11 +3,13 @@ import { FaLinkedinIn } from "react-icons/fa";
 import { FaFacebookF } from "react-icons/fa";
 import login from "../../assets/images/login/login.svg";
 import { Link } from "react-router-dom";
-import { useContext } from "react";
-import { AuthContext } from "../../Providers/AuthProvider";
+import useAuth from "../../Hooks/useAuth";
+// import { useContext } from "react";
+// import { AuthContext } from "../../Providers/AuthProvider";
 
 const SignUp = () => {
-  const { signUpWithEmailPass } = useContext(AuthContext);
+  // const { signUpWithEmailPass } = useContext(AuthContext);
+  const { signUpWithEmailPass } = useAuth();
 
   const handleSignUp = (e) => {
     e.preventDefault();

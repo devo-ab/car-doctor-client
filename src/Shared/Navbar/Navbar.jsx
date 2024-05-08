@@ -1,6 +1,19 @@
+import { useContext } from "react";
 import { Link, NavLink } from "react-router-dom";
+import { AuthContext } from "../../Providers/AuthProvider";
 
 const Navbar = () => {
+
+  const {user, signOutUser} = useContext(AuthContext);
+
+  const handleSignOut = () => {
+    signOutUser()
+    .then(() => {})
+    .catch((error) => {
+      console.log(error)
+    })
+  };
+
   const navLink = (
     <div className="lg:space-x-5 space-y-2 md:space-y-0 flex flex-col lg:flex-row items-center">
       <NavLink
@@ -53,6 +66,28 @@ const Navbar = () => {
       >
         Contact
       </NavLink>
+      {user && <NavLink
+        to="/bookings"
+        className={({ isActive }) =>
+          isActive
+            ? "text-base-content text-lg font-medium border border-indigo-500 rounded-md px-3 py-1 text-center"
+            : "text-base-content text-center text-lg"
+        }
+      >
+        Bookings
+      </NavLink>}
+      {
+        user?<button onClick={handleSignOut}>Sign Out</button>: <NavLink
+          to="/signin"
+          className={({ isActive }) =>
+            isActive
+              ? "text-base-content text-lg font-medium border border-indigo-500 rounded-md px-3 py-1 text-center"
+              : "text-base-content text-center text-lg"
+          }
+        >
+          SignIn
+        </NavLink>
+      }
     </div>
   );
 
